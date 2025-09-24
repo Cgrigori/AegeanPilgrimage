@@ -20,10 +20,12 @@ def _is_allowed(filename: str) -> bool:
 def profile():
 	form = ProfileForm(obj=current_user)
 	password_form = PasswordChangeForm()
-	# Handle profile update
-	if form.validate_on_submit():
+	
+	# Handle profile update (only if profile form was submitted)
+	if form.validate_on_submit() and form.submit.data:
 		current_user.name = form.name.data or current_user.name
 		current_user.bio = form.bio.data or None
+
 		file = form.avatar_file.data
 		if file and getattr(file, "filename", ""):
 			filename = secure_filename(file.filename)
@@ -41,7 +43,15 @@ def profile():
 		db.session.commit()
 		flash("Profile updated.", "ok")
 		return redirect(url_for("account.profile"))
-	# Handle password change
+
+	avatar = current_user.avatar_url or DEFAULT_AVATAR(current_user.email or "User")
+	return render_template("account/profile.html", user=current_user, form=form, password_form=password_form, avatar=avatar)
+
+@bp.route("/change-password", methods=["POST"])
+@login_required
+def change_password():
+	password_form = PasswordChangeForm()
+	
 	if password_form.validate_on_submit():
 		if not check_password_hash(current_user.password_hash, password_form.current_password.data):
 			flash("Current password is incorrect.", "error")
@@ -49,7 +59,7 @@ def profile():
 			current_user.password_hash = generate_password_hash(password_form.new_password.data)
 			db.session.commit()
 			flash("Password changed successfully.", "ok")
-		return redirect(url_for("account.profile"))
-
-	avatar = current_user.avatar_url or DEFAULT_AVATAR(current_user.email or "User")
-	return render_template("account/profile.html", user=current_user, form=form, password_form=password_form, avatar=avatar)
+	else:
+		flash("Please fill all password fields correctly.", "error")
+	
+	return redirect(url_for("account.profile"))

@@ -11,6 +11,7 @@
     {% if user.role %}<div class="badge" style="margin-top:8px;display:inline-block">{{ user.role }}</div>{% endif %}
     {% if user.bio %}<p class="muted" style="margin-top:10px">{{ user.bio }}</p>{% endif %}
   </div>
+
   <div style="display:flex;flex-direction:column;gap:20px">
     <div class="card" style="padding:16px">
       <h3>Profile Settings</h3>
@@ -37,7 +38,7 @@
 
     <div class="card" style="padding:16px">
       <h3>Change Password</h3>
-      <form method="post">
+      <form method="post" action="{{ url_for('account.change_password') }}">
         {{ password_form.hidden_tag() }}
         <div class="field">
           <label>Current Password</label>

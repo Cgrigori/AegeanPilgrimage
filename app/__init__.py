@@ -36,26 +36,12 @@ def create_app():
 	app.register_blueprint(admin_bp, url_prefix="/admin")
 	app.register_blueprint(bookings_bp, url_prefix="/bookings")
 
-	# Auto-create admin on first startup (one-time only)
+	# Ensure DB tables exist
 	with app.app_context():
 		try:
 			from sqlalchemy import text
 			db.session.execute(text("SELECT 1"))
 			db.create_all()
-			
-			# Check if any admin exists
-			from .models import User
-			admin_exists = User.query.filter_by(role="admin").first()
-			if not admin_exists:
-				admin = User(
-					email="grigori7519@gmail.com",
-					name="Admin",
-					password_hash=generate_password_hash("your_chosen_password"),
-					role="admin"
-				)
-				db.session.add(admin)
-				db.session.commit()
-				print("Admin created automatically on first startup")
 		except Exception as e:
 			print(f"DB setup error: {e}")
 

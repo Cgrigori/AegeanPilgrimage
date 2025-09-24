@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Manage Trips{% endblock %}
+{% block content %}
+<h1>Manage Trips</h1>
+<p><a class="btn" href="{{ url_for('trips.manage_new') }}">New Trip</a></p>
+<table>
+  <thead><tr><th>Title</th><th>Slug</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+    {% for t in trips %}
+      <tr>
+        <td>{{ t.title }}</td><td>{{ t.slug }}</td><td>{{ 'Active' if t.is_active else 'Inactive' }}</td>
+        <td><a href="{{ url_for('trips.manage_edit', slug=t.slug) }}">Edit</a> · <a href="{{ url_for('trips.detail', slug=t.slug) }}">View</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

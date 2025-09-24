@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{ 'New Trip' if not trip else 'Edit Trip' }}{% endblock %}
+{% block content %}
+<h1>{{ 'New Trip' if not trip else 'Edit Trip' }}</h1>
+<form method="post">
+  {{ form.hidden_tag() }}
+  <div><label>Title</label>{{ form.title(size=60) }}</div>
+  <div><label>Slug</label>{{ form.slug(size=60) }}</div>
+  <div><label>Main Image URL</label>{{ form.hero_image_url(size=80) }}</div>
+  <div><label>Short Description</label>{{ form.short_description(size=80) }}</div>
+  <div><label>Detailed Plan</label>{{ form.detailed_plan(rows=8, cols=80) }}</div>
+  <div><label>Price (cents)</label>{{ form.price_cents() }}</div>
+  {% if current_user.is_authenticated and current_user.role == 'admin' %}
+    <hr>
+    <h3>Admin Controls</h3>
+    <div><label>Active</label>{{ form.is_active() }}</div>
+    <div style="margin-top:8px">
+      <label>Booking Mode</label>
+      <div>{{ form.booking_mode() }}</div>
+      <small class="hint">Choose one: Direct (Stripe) or Inquiry (Contact). “None” hides the button.</small>
+    </div>
+  {% else %}
+      <hr>
+      <div class="hint">Trip will be created as Inactive and Not bookable. An admin must approve and choose booking mode.</div>
+  {% endif %}
+  <div>{{ form.submit(class_="btn") }}</div>
+</form>
+
+{% if trip %}
+  <hr>
+  <h2>Gallery</h2>
+  <form method="post">
+    {{ photo_form.hidden_tag() }}
+    <div><label>Photo URL</label>{{ photo_form.image_url(size=80) }}</div>
+    <div><label>Caption</label>{{ photo_form.caption(size=60) }}</div>
+    <div>{{ photo_form.submit(class_="btn-outline") }}</div>
+  </form>
+  <div class="cards" style="grid-template-columns:repeat(3,1fr);margin-top:12px">
+    {% for p in photos %}
+      <div class="card">
+      <div style="aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:1px solid #e6eef7;background:#eef4fb;margin-bottom:8px">
+          <img src="{{ p.image_url }}" style="width:100%;height:100%;object-fit:cover">
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <small>{{ p.caption or '' }}</small>
+          <form method="post" action="{{ url_for('trips.manage_delete_photo', slug=trip.slug, photo_id=p.id) }}">
+            <button class="btn-outline" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}

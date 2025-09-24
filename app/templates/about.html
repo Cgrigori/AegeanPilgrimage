@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}About Us · Aegean Pilgrimages{% endblock %}
+
+{% block hero %}
+<section class="hero about-bg">
+  <div class="container">
+    <div class="hero-card" style="background:rgba(255,255,255,0.9)">
+      <div>
+        <div class="badge">Our Story</div>
+        <h1>Journeys of Faith across Greece</h1>
+        <p class="lead">We guide travelers, students, and communities through monasteries, coastal sanctuaries, and forest hermitages—embracing the spiritual and cultural heart of Greece.</p>
+      </div>
+      <div class="hero-visual" style="background-image:url('https://images.unsplash.com/photo-1525393839361-5cd271a2da07?q=80&w=1200&auto=format&fit=crop')"></div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="about-section">
+  <div class="container about-grid">
+    <div class="polaroid about-wrap" style="aspect-ratio:4/3">
+      <img src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1200&auto=format&fit=crop" alt="Island chapel">
+      <div class="note">Island Chapel</div>
+    </div>
+    <div class="about-text">
+      <h2>Rooted in Tradition</h2>
+      <p>Born on the Aegean shoreline, our itineraries weave liturgy, architecture, and local life. We partner with monasteries and communities to offer encounters that are reverent and authentic.</p>
+      <p>From Cycladic chapels to alpine hermitages, we combine the quiet of pilgrimage with the joy of shared travel.</p>
+    </div>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="container about-grid" style="grid-template-columns:.9fr 1.1fr">
+    <div class="about-text">
+      <h2>Our Team</h2>
+      <p>Guides, historians, and coordinators who care deeply about hospitality. We work closely with universities and organizations to tailor programs with academic depth.</p>
+      <p>Group pilgrimages, faculty-led programs, and custom retreats are all part of our story.</p>
+    </div>
+    <div class="polaroid about-wrap" style="aspect-ratio:16/10; transform:rotate(2deg)">
+      <img src="https://images.unsplash.com/photo-1512223792601-592a66e88e61?q=80&w=1400&auto=format&fit=crop" alt="Team">
+      <div class="note">Our Team</div>
+    </div>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="container">
+    <h2 style="margin-bottom:12px">Moments from the Road</h2>
+    <div class="slider" data-slider>
+      <div class="slider-track" data-track>
+        <div class="slider-item" data-item>
+          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop" alt="Coastal monastery" style="width:100%;height:420px;object-fit:cover">
+        </div>
+        <div class="slider-item" data-item>
+          <img src="https://images.unsplash.com/photo-1526481280698-8fcc13fd7830?q=80&w=1600&auto=format&fit=crop" alt="Forest trail" style="width:100%;height:420px;object-fit:cover">
+        </div>
+        <div class="slider-item" data-item>
+          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop" alt="Island sunset" style="width:100%;height:420px;object-fit:cover">
+        </div>
+      </div>
+      <div class="slider-controls">
+        <button type="button" aria-label="Prev" data-prev>‹</button>
+        <button type="button" aria-label="Next" data-next>›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="container about-grid">
+    <div class="polaroid about-wrap" style="aspect-ratio:4/3">
+      <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop" alt="Mountain hermitage">
+      <div class="note">Forest Hermitage</div>
+    </div>
+    <div class="about-text">
+      <h2>Why We Travel</h2>
+      <p>Pilgrimage slows us down. It lets us see with gratitude and listen with attention. We create time for quiet, for shared meals, and for the unexpected grace of the journey.</p>
+      <p>Whether you’re planning a student program or a personal retreat, we’ll help you shape an itinerary that reflects your community and hopes.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

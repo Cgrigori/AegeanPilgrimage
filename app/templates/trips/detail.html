@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ trip.title }} - Aegean Pilgrimages{% endblock %}
+
+{% block hero %}
+<div class="container" style="padding-top:10px; display:flex; gap:8px">
+  <a class="btn-outline btn-sm" href="{{ url_for('trips.index') }}">← Back to Trips</a>
+  {% if current_user.is_authenticated and current_user.role in ['admin','creator'] %}
+    <a class="btn-outline btn-sm" href="{{ url_for('trips.manage_edit', slug=trip.slug) }}">Edit trip</a>
+  {% endif %}
+</div>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-card">
+      <div>
+        <div class="badge">Curated Journey</div>
+        <h1>{{ trip.title }}</h1>
+        <p class="lead">{{ trip.short_description }}</p>
+        <div style="display:flex;gap:12px;margin-top:12px">
+          {% if trip.booking_mode == 'direct' %}
+            <a class="btn" href="{{ url_for('bookings.start', trip_id=trip.id) }}">Book now</a>
+          {% elif trip.booking_mode == 'inquiry' %}
+            <a class="btn" href="{{ url_for('contact.contact') }}?dest={{ trip.slug }}">Inquire</a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="hero-visual" style="{% if trip.hero_image_url %}background:url('{{ trip.hero_image_url }}') center/cover no-repeat;{% endif %}"></div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="card">
+    <h3>Trip Plan</h3>
+    <div style="white-space:pre-wrap">{{ trip.detailed_plan or 'Detailed plan coming soon.' }}</div>
+  </div>
+</section>
+
+{% if trip.booking_mode == 'inquiry' %}
+<section class="section">
+  <div class="card">
+    <h3>Interested in {{ trip.title }}?</h3>
+    <p>Send us a message and we’ll tailor dates and details for your group.</p>
+    <a class="btn" href="{{ url_for('contact.contact') }}?dest={{ trip.slug }}">Start inquiry</a>
+  </div>
+</section>
+{% endif %}
+
+{% if trip.photos %}
+<section class="section">
+  <h3>Gallery</h3>
+  <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+    {% for p in trip.photos %}
+      <figure class="card" style="padding:8px">
+        <div style="aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:1px solid #e6eef7;background:#eef4fb">
+          <img src="{{ p.image_url }}" alt="{{ p.caption or trip.title }}" style="width:100%;height:100%;object-fit:cover">
+        </div>
+        {% if p.caption %}<figcaption style="color:var(--muted);margin-top:6px">{{ p.caption }}</figcaption>{% endif %}
+      </figure>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

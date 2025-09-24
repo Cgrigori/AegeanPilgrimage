@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Trips - Aegean Pilgrimages{% endblock %}
+{% block content %}
+<h1>Trips</h1>
+
+{% if featured %}
+<section class="section">
+  <div class="hero-card" style="grid-template-columns:1.1fr .9fr">
+    <div>
+      <div class="badge">Latest Offer</div>
+      <h2 style="margin:0 0 8px"><a href="{{ url_for('trips.detail', slug=featured.slug) }}">{{ featured.title }}</a></h2>
+      <p class="lead">{{ featured.short_description or featured.detailed_plan[:160] ~ ('...' if (featured.detailed_plan|length>160) else '') }}</p>
+      <div style="display:flex;gap:12px;margin-top:10px">
+        <a class="btn"
+           href="{% if featured and featured.booking_mode == 'direct' %}{{ url_for('bookings.start', trip_id=featured.id) }}{% elif featured and featured.booking_mode == 'inquiry' %}{{ url_for('contact.contact') }}?dest={{ featured.slug }}{% else %}#{% endif %}">
+          {% if featured and featured.booking_mode == 'direct' %}Book now{% elif featured and featured.booking_mode == 'inquiry' %}Inquire{% else %}Learn more{% endif %}
+        </a>
+        <a class="btn" href="{{ url_for('trips.detail', slug=featured.slug) }}">View Details</a>
+        <a class="btn-outline" href="{{ url_for('bookings.start', trip_id=featured.id) if false else '#' }}">Book</a>
+      </div>
+    </div>
+    <a href="{{ url_for('trips.detail', slug=featured.slug) }}" class="hero-visual" style="{% if featured.hero_image_url %}background:url('{{ featured.hero_image_url }}') center/cover no-repeat;{% endif %}"></a>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="cards">
+    {% for t in trips %}
+    <a class="card" href="{{ url_for('trips.detail', slug=t.slug) }}" style="display:block">
+      <div style="aspect-ratio:16/9;border-radius:12px;background:#eef4fb;border:1px solid #e3edf8;overflow:hidden;margin-bottom:10px;{% if t.hero_image_url %}background:url('{{ t.hero_image_url }}') center/cover no-repeat;{% endif %}"></div>
+      <h3>{{ t.title }}</h3>
+      <p style="color:var(--muted);margin:6px 0 0">{{ t.short_description }}</p>
+    </a>
+    {% else %}
+      <p>No trips yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

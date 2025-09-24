@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Contact · Aegean Pilgrimages{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:1000px">
+    <div class="card contact-card">
+      <div class="contact-header">
+        <h1>Contact Us</h1>
+        <p class="lead">Send us an email so we can start our communication and make you an offer.</p>
+      </div>
+
+      <div class="contact-grid">
+        <form method="post" class="contact-form">
+          {{ form.hidden_tag() }}
+          <div class="row">
+            <div class="field">
+              <label>Your Name</label>
+              {{ form.name(size=40, class_="input") }}
+            </div>
+            <div class="field">
+              <label>Your Email</label>
+              {{ form.email(size=40, class_="input") }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Start Date</label>
+              {{ form.start_date(class_="input") }}
+            </div>
+            <div class="field">
+              <label>End Date</label>
+              {{ form.end_date(class_="input") }}
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>Number of People</label>
+              {{ form.num_people(class_="input") }}
+            </div>
+            <div class="field">
+              <label>Destination</label>
+              {{ form.destination(class_="input", id="contact-destination") }}
+              <small class="hint">Not sure yet? Keep “Not yet decided”.</small>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Message</label>
+            {{ form.message(rows=8, cols=80, class_="textarea") }}
+          </div>
+
+          <div class="actions">
+            {{ form.submit(class_="btn") }}
+            <a class="btn-outline" href="mailto:{{ contact_email }}?subject=Travel%20Inquiry">Or email us directly</a>
+          </div>
+        </form>
+
+        <aside class="contact-preview">
+          <div class="polaroid about-wrap" style="aspect-ratio:4/3">
+            <img id="dest-preview-img" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop" alt="Destination preview">
+            <div class="note" id="dest-preview-title">Destination Preview</div>
+          </div>
+          <div class="card preview-text">
+            <strong id="dest-preview-name">Not yet decided</strong>
+            <p id="dest-preview-desc" class="muted">Choose a destination to preview its photo and description.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  window.tripPreviewData = {
+    {% for t in trips %}
+      "{{ t.slug }}": {
+        "name": {{ (t.title)|tojson }},
+        "image": {{ (t.hero_image_url or "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop")|tojson }},
+        "desc": {{ (t.short_description or "A curated journey.")|tojson }}
+      }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  };
+</script>
+{% endblock %}

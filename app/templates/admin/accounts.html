@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Accounts Management{% endblock %}
+{% block content %}
+<h1>Accounts Management</h1>
+
+<div class="card" style="overflow:auto">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Actions</th>
+        <th>Joined</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.name or "-" }}</td>
+        <td>
+          {% if u.role == 'admin' %}
+            <span class="badge">admin</span>
+          {% else %}
+            <form method="post" action="{{ url_for('admin.set_role', user_id=u.id) }}" style="display:flex;gap:8px;align-items:center">
+              <select name="role" class="input" style="height:36px">
+                <option value="user" {{ 'selected' if u.role=='user' else '' }}>user</option>
+                <option value="creator" {{ 'selected' if u.role=='creator' else '' }}>creator</option>
+                <option value="reviewer" {{ 'selected' if u.role=='reviewer' else '' }}>reviewer</option>
+              </select>
+              <button class="btn-outline" type="submit">Update</button>
+            </form>
+          {% endif %}
+        </td>
+        <td>
+          {% if u.role != 'admin' %}
+            <em>Role change allowed</em>
+          {% else %}
+            <em>Locked</em>
+          {% endif %}
+        </td>
+        <td>{{ u.created_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

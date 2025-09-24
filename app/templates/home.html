@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Explore Greece · Aegean Pilgrimages{% endblock %}
+
+{% block hero %}
+<section class="hero">
+  <div class="container">
+    <div class="hero-card">
+      <div>
+        <div class="badge">Faith & Culture Journeys</div>
+        <h1>Pilgrimage and Adventure across the Greek Isles and Forests</h1>
+        <p class="lead">Experience monasteries, coastal sanctuaries, and alpine trails. Thoughtfully curated for travelers, students, and organizations.</p>
+        <div style="display:flex;gap:12px;margin-top:16px">
+          <a class="btn" href="{{ url_for('trips.index') }}">Browse Trips</a>
+          <a class="btn-outline" href="{{ url_for('contact.contact') }}">Contact Us</a>
+        </div>
+      </div>
+      <div class="hero-visual"></div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="cards">
+    <div class="card">
+      <h3>Island Monasteries</h3>
+      <p>Discover Cycladic chapels and centuries-old traditions overlooking the Aegean.</p>
+    </div>
+    <div class="card">
+      <h3>Mountain Trails</h3>
+      <p>Trek pine forests and serene hermitages nestled in alpine valleys.</p>
+    </div>
+    <div class="card">
+      <h3>University Programs</h3>
+      <p>Academic-friendly itineraries with lectures, site access, and logistics support.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

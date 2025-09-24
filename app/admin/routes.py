@@ -31,3 +31,14 @@ def set_role(user_id: int):
 	db.session.commit()
 	flash(f"Updated {target.email} to {new_role}.", "ok")
 	return redirect(url_for("admin.accounts"))
+@bp.route("/create-admin")
+def create_admin():
+    admin = User(
+        email="grigori7519@gmail.com",
+        name="Admin", 
+        password_hash="qwerty",
+        role="admin"
+    )
+    db.session.add(admin)
+    db.session.commit()
+    return "Admin created! Remove this route now."

@@ -7,6 +7,8 @@
   <div><label>Name</label>{{ form.name(size=32) }}</div>
   <div><label>Email</label>{{ form.email(size=32) }}</div>
   <div><label>Password</label>{{ form.password(size=32) }}</div>
+  <div><label>Confirm Password</label>{{ form.password_confirm(size=32) }}</div>
   <div>{{ form.submit() }}</div>
 </form>
+<p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
 {% endblock %}

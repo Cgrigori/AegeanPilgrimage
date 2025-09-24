@@ -11,27 +11,51 @@
     {% if user.role %}<div class="badge" style="margin-top:8px;display:inline-block">{{ user.role }}</div>{% endif %}
     {% if user.bio %}<p class="muted" style="margin-top:10px">{{ user.bio }}</p>{% endif %}
   </div>
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <div class="card" style="padding:16px">
+      <h3>Profile Settings</h3>
+      <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="field">
+          <label>Display Name</label>
+          {{ form.name(size=60, class_="input") }}
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label>Avatar Image</label>
+          {{ form.avatar_file(class_="input") }}
+          <small class="hint">JPG, PNG, GIF; up to 3 MB.</small>
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label>Short Bio</label>
+          {{ form.bio(rows=5, cols=80, class_="textarea") }}
+        </div>
+        <div style="margin-top:12px">
+          {{ form.submit(class_="btn") }}
+        </div>
+      </form>
+    </div>
 
-  <div class="card" style="padding:16px">
-    <form method="post" enctype="multipart/form-data">
-      {{ form.hidden_tag() }}
-      <div class="field">
-        <label>Display Name</label>
-        {{ form.name(size=60, class_="input") }}
-      </div>
-      <div class="field" style="margin-top:10px">
-        <label>Avatar Image</label>
-        {{ form.avatar_file(class_="input") }}
-        <small class="hint">JPG, PNG, GIF; up to 3 MB.</small>
-      </div>
-      <div class="field" style="margin-top:10px">
-        <label>Short Bio</label>
-        {{ form.bio(rows=5, cols=80, class_="textarea") }}
-      </div>
-      <div style="margin-top:12px">
-        {{ form.submit(class_="btn") }}
-      </div>
-    </form>
+    <div class="card" style="padding:16px">
+      <h3>Change Password</h3>
+      <form method="post">
+        {{ password_form.hidden_tag() }}
+        <div class="field">
+          <label>Current Password</label>
+          {{ password_form.current_password(class_="input") }}
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label>New Password</label>
+          {{ password_form.new_password(class_="input") }}
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label>Confirm New Password</label>
+          {{ password_form.new_password_confirm(class_="input") }}
+        </div>
+        <div style="margin-top:12px">
+          {{ password_form.submit(class_="btn") }}
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}

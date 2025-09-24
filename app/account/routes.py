@@ -1,9 +1,10 @@
 import os, time
-from flask import Blueprint, render_template, redirect, url_for, flash, current_app
+from flask import Blueprint, render_template, redirect, url_for, flash, current_app, request
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash, generate_password_hash
 from .. import db
-from .forms import ProfileForm
+from .forms import ProfileForm, PasswordChangeForm
 
 bp = Blueprint("account", __name__)
 
@@ -18,12 +19,11 @@ def _is_allowed(filename: str) -> bool:
 @login_required
 def profile():
 	form = ProfileForm(obj=current_user)
+	password_form = PasswordChangeForm()
+	# Handle profile update
 	if form.validate_on_submit():
-		# Update name and bio
 		current_user.name = form.name.data or current_user.name
 		current_user.bio = form.bio.data or None
-
-		# Handle avatar upload (optional)
 		file = form.avatar_file.data
 		if file and getattr(file, "filename", ""):
 			filename = secure_filename(file.filename)
@@ -36,12 +36,20 @@ def profile():
 			os.makedirs(upload_dir, exist_ok=True)
 			file_path = os.path.join(upload_dir, new_name)
 			file.save(file_path)
-			# Save URL path (served from /static)
 			current_user.avatar_url = url_for("static", filename=f"uploads/avatars/{new_name}")
 
 		db.session.commit()
 		flash("Profile updated.", "ok")
 		return redirect(url_for("account.profile"))
+	# Handle password change
+	if password_form.validate_on_submit():
+		if not check_password_hash(current_user.password_hash, password_form.current_password.data):
+			flash("Current password is incorrect.", "error")
+		else:
+			current_user.password_hash = generate_password_hash(password_form.new_password.data)
+			db.session.commit()
+			flash("Password changed successfully.", "ok")
+		return redirect(url_for("account.profile"))
 
 	avatar = current_user.avatar_url or DEFAULT_AVATAR(current_user.email or "User")
-	return render_template("account/profile.html", user=current_user, form=form, avatar=avatar)
+	return render_template("account/profile.html", user=current_user, form=form, password_form=password_form, avatar=avatar)

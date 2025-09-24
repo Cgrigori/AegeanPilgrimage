@@ -19,9 +19,11 @@
           <a href="{{ url_for('trips.index') }}" class="{% if request.blueprint == 'trips' %}active{% endif %}">Trips</a>
           <a href="{{ url_for('pages.about') }}" class="{% if request.endpoint == 'pages.about' %}active{% endif %}">About</a>
           <a href="{{ url_for('contact.contact') }}" class="{% if request.blueprint == 'contact' %}active{% endif %}">Contact</a>
+          {% if current_user.is_authenticated and current_user.role in ['admin','creator'] %}
+            <a href="{{ url_for('trips.manage_index') }}">Manage Trips</a>
+          {% endif %}
           {% if current_user.is_authenticated and current_user.role == 'admin' %}
             <a href="{{ url_for('admin.accounts') }}">Accounts Management</a>
-          {% if current_user.is_authenticated and current_user.role in ['admin','creator'] %}<a href="{{ url_for('trips.manage_index') }}">Manage Trips</a>{% endif %}
           {% endif %}
         </nav>
         <div class="auth-links">

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, abort, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from ..models import User, db
-
+from werkzeug.security import generate_password_hash
 bp = Blueprint("admin", __name__)
 
 @bp.get("/accounts")
@@ -30,15 +30,25 @@ def set_role(user_id: int):
 	target.role = new_role
 	db.session.commit()
 	flash(f"Updated {target.email} to {new_role}.", "ok")
+	with app.app_context():
+    try:
+        from sqlalchemy import text
+        db.session.execute(text("SELECT 1"))
+        db.create_all()
+        
+        # Check if any admin exists
+        admin_exists = User.query.filter_by(role="admin").first()
+        if not admin_exists:
+            admin = User(
+                email="grigori7519@gmail.com",
+                name="Admin",
+                password_hash=generate_password_hash("qwerty"),
+                role="admin"
+            )
+            db.session.add(admin)
+            db.session.commit()
+            print("Admin created automatically on first startup")
+    except Exception as e:
+        print(f"DB setup error: {e}")
 	return redirect(url_for("admin.accounts"))
-@bp.route("/create-admin")
-def create_admin():
-    admin = User(
-        email="grigori7519@gmail.com",
-        name="Admin", 
-        password_hash="qwerty",
-        role="admin"
-    )
-    db.session.add(admin)
-    db.session.commit()
-    return "Admin created! Remove this route now."
+

@@ -36,6 +36,14 @@ def create_app():
 	app.register_blueprint(account_bp, url_prefix="/account")
 	app.register_blueprint(admin_bp, url_prefix="/admin")
 	app.register_blueprint(bookings_bp, url_prefix="/bookings")
+	from . import models  # ensure models imported
+	with app.app_context():
+	  try:
+	    from sqlalchemy import text
+	    db.session.execute(text("SELECT 1"))
+	    db.create_all()
+	  except Exception:
+	    pass
 
 	return app
 

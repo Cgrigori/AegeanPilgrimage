@@ -11,5 +11,4 @@ redis==5.1.0
 celery==5.4.0
 itsdangerous==2.2.0
 email-validator==2.2.0
-
- gunicorn==23.0.0
+gunicorn==23.0.0

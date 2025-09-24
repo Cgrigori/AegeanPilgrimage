@@ -89,3 +89,8 @@ def manage_edit(slug):
 		return redirect(url_for("trips.manage_edit", slug=trip.slug))
 
 	return render_template("trips/manage_edit.html", form=form, trip=trip, photo_form=photo_form, photos=trip.photos)
+
+@bp.get("/debug-role")
+@login_required
+def debug_role():
+	return f"User: {current_user.email}, Role: {current_user.role}, Authenticated: {current_user.is_authenticated}"

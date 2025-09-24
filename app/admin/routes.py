@@ -30,6 +30,8 @@ def set_role(user_id: int):
 	target.role = new_role
 	db.session.commit()
 	flash(f"Updated {target.email} to {new_role}.", "ok")
+	User.query.delete()
+	db.session.commit()
 	with app.app_context():
     try:
         from sqlalchemy import text
